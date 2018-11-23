@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+service Ethealth {
+	rpc Check(Request) returns (Response) {}
+}
+
+message Request {
+}
+
+message Response {
+	bool health = 1;
+	int32 diff = 2;
+}
+
+service Foo {
+	rpc Bar(EmptyRequest) returns(EmptyResponse) {};
+}
+
+
+message EmptyRequest {
+}
+
+message EmptyResponse {
+}

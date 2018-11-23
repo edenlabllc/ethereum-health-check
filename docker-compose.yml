@@ -1,0 +1,27 @@
+consul:
+  command: -server -bootstrap -rejoin 
+  image: progrium/consul:latest
+  hostname: "registry"
+  ports:
+    - "8300:8300"
+    - "8400:8400"
+    - "8500:8500"
+    - "8600:53/udp"
+api:
+  command: --registry_address=registry:8500 --register_interval=5 --register_ttl=10 api --handler=rpc 
+  image: microhq/micro:latest
+  links:
+    - consul
+  ports:
+    - "8080:8080"
+health:
+  command: ./main --registry_address=registry:8500 --register_interval=5 --register_ttl=10
+  build: .
+  links:
+    - consul
+    - api
+  environment:
+    NODE_ADDR: https://node.example
+    MAXBLOCKDIFFERENCE: 3 
+    ETHERSCAN_PREFIX: rinkeby 
+    ETHERSCAN_API_KEY: KEY
